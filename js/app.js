@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () =>  {
   const phrase = document.getElementById("phrase");
   const resetButton = document.querySelector(".btn__reset");
   const overlay = document.querySelector("#overlay");
+  // const buttons = document.getElementsByTagName('button');
+
   let missed = 0;
   var phraseAnswers = [
     "Help me with code",
@@ -21,8 +23,10 @@ document.addEventListener("DOMContentLoaded", () =>  {
 
   // remove overlay from the start page
 
-  resetButton.addEventListener("click", () => {
-    overlay.style.display = "none";
+    resetButton.addEventListener("click", () => {
+      overlay.style.display = "none";
+
+    });
 
     // Random generator, split up string
 
@@ -30,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () =>  {
       let firstRandomPhrase = newRandom[Math.floor(Math.random() * newRandom.length)];
       let finalPhrase = firstRandomPhrase.split('');
       return finalPhrase;
-    }
+    };
 
     // Add random phrase to page
 
@@ -51,13 +55,38 @@ document.addEventListener("DOMContentLoaded", () =>  {
       };
     };
 
+    // Check letter functions
+
+  querty.addEventListener('click', (e) => {
+
+    let currentLetter = e.target;
+    let letterClass = document.getElementsByClassName('letter');
+
+    currentLetter.className += 'chosen';
+    currentLetter.disabled = true;
+
+    console.log('here');
+
+    function checkLetter() {
+
+      for (let i = 0; i < letterClass[i].length; i++){
+        console.log('here again');
+        if (currentLetter.value === letterClass[i].value) {
+          let answerLetter = letterClass[i].className += 'show';
+          return answerLetter;
+        } else {
+          return null;
+        }
+      }
+    };
+    checkLetter();
+  });
+
     // Run random generator
 
     let phraseArray = getRandomPhraseAsArray(phraseAnswers);
     console.log(phraseArray);
 
     addPhrasetoDisplay(phraseArray);
-
-  });
 
 });
