@@ -101,6 +101,9 @@ button {
 .show {
   color: #000;
   background-color: #76CE82;
+  text-transform: uppercase;
+  transition: transform 1s;
+  transform: rotate(360deg);
 }
 
 /* Keyboard */

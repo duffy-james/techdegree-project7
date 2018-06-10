@@ -1,14 +1,18 @@
 // *** Load the page *** //
 
-document.addEventListener("DOMContentLoaded", () =>  {
+document.addEventListener('DOMContentLoaded', () =>  {
 
   // initial variables for the page
 
-  const querty = document.getElementById("qwerty");
-  const phrase = document.getElementById("phrase");
-  const resetButton = document.querySelector(".btn__reset");
-  const overlay = document.querySelector("#overlay");
-  // const buttons = document.querySelectorAll('button');
+  const querty = document.getElementById('qwerty');
+  const phrase = document.getElementById('phrase');
+  const resetButton = document.querySelector('.btn__reset');
+  const overlay = document.querySelector('#overlay');
+  const winScreen = document.querySelector('.winScreen');
+  const loseScreen = document.querySelector('.loseScreen');
+  const letterClass = document.getElementsByClassName('letter');
+  const showClass = document.getElementsByClassName('show');
+  const title = document.querySelector('.title');
 
   let missed = 0;
   var phraseAnswers = [
@@ -19,13 +23,11 @@ document.addEventListener("DOMContentLoaded", () =>  {
     "This is not a joke"
   ];
 
-// *** Global functions *** //
 
   // remove overlay from the start page
 
     resetButton.addEventListener("click", () => {
       overlay.style.display = "none";
-
     });
 
     // Random generator, split up string
@@ -55,29 +57,31 @@ document.addEventListener("DOMContentLoaded", () =>  {
       };
     };
 
-    // Check letters to see if they match 'letter' class
+    // Function to check letters to see if they match 'letter' class
 
     function checkLetter(guess) {
 
-      const letterClass = document.getElementsByClassName('letter');
+      let check = false;
 
       for (let i = 0; i < letterClass.length; i+= 1) {
 
         let phraseLetter = letterClass[i];
 
-        console.log('here');
-
         if (guess.textContent.toLowerCase() === phraseLetter.textContent.toLowerCase()) {
 
-          console.log('here 2');
-
           let letterMatch = phraseLetter.className += ' show';
+          check = true;
         }
       }
-      return null;
+      return check;
     }
 
-  // Check letters
+  // Run random generator
+
+    let phraseArray = getRandomPhraseAsArray(phraseAnswers);
+    addPhrasetoDisplay(phraseArray);
+
+  // Check letters when user clicks
 
   querty.addEventListener('click', (e) => {
 
@@ -90,15 +94,52 @@ document.addEventListener("DOMContentLoaded", () =>  {
         button.className += 'chosen';
         button.disabled = true;
 
+        // Run the check letter function
+
         const letterFound = checkLetter(button);
+
+        if (letterFound === false) {
+          const score = document.querySelector('ol');
+          const li = document.querySelectorAll('.tries');
+          score.removeChild(li[0]);
+          missed += 1;
+        }
+
+        // Check to see if the player wins
+
+        function checkWin() {
+
+          // If they win, they see the congrats screen
+          if (showClass.length == letterClass.length) {
+            overlay.style.display = 'flex';
+            overlay.className = 'win';
+            phrase.remove();
+            // page is reset
+            title.innerHTML = "You win! You're so smart!";
+            missed = 0;
+            resetButton.innerHTML = "Restart game?";
+            resetButton.addEventListener('click', () => {
+              location.reload();
+              overlay.style.display = "none";
+            });
+          } else if (missed === 5) {
+
+            // If they lose, they get the try again screen
+            overlay.style.display = 'flex';
+            overlay.className = 'lose';
+            phrase.remove();
+            // page is reset
+            title.innerHTML = "Sorry my friend, you lose.";
+            resetButton.innerHTML = "Try again?";
+            resetButton.addEventListener('click', () => {
+              overlay.style.display = "none";
+              location.reload();
+            });
+            missed = 0;
+          }
+        }
+        checkWin();
       };
     });
-
-    // Run random generator
-
-    let phraseArray = getRandomPhraseAsArray(phraseAnswers);
-    console.log(phraseArray);
-
-    addPhrasetoDisplay(phraseArray);
 
 });
