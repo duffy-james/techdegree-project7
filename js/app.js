@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () =>  {
   const phrase = document.getElementById("phrase");
   const resetButton = document.querySelector(".btn__reset");
   const overlay = document.querySelector("#overlay");
-  // const buttons = document.getElementsByTagName('button');
+  // const buttons = document.querySelectorAll('button');
 
   let missed = 0;
   var phraseAnswers = [
@@ -55,32 +55,44 @@ document.addEventListener("DOMContentLoaded", () =>  {
       };
     };
 
-    // Check letter functions
+    // Check letters to see if they match 'letter' class
+
+    function checkLetter(guess) {
+
+      const letterClass = document.getElementsByClassName('letter');
+
+      for (let i = 0; i < letterClass.length; i+= 1) {
+
+        let phraseLetter = letterClass[i];
+
+        console.log('here');
+
+        if (guess.textContent.toLowerCase() === phraseLetter.textContent.toLowerCase()) {
+
+          console.log('here 2');
+
+          let letterMatch = phraseLetter.className += ' show';
+        }
+      }
+      return null;
+    }
+
+  // Check letters
 
   querty.addEventListener('click', (e) => {
 
-    let currentLetter = e.target;
-    let letterClass = document.getElementsByClassName('letter');
+      if (e.target.tagName === 'BUTTON') {
 
-    currentLetter.className += 'chosen';
-    currentLetter.disabled = true;
+        const button = e.target;
 
-    console.log('here');
+        // Make sure the letters are shown as checked
 
-    function checkLetter() {
+        button.className += 'chosen';
+        button.disabled = true;
 
-      for (let i = 0; i < letterClass[i].length; i++){
-        console.log('here again');
-        if (currentLetter.value === letterClass[i].value) {
-          let answerLetter = letterClass[i].className += 'show';
-          return answerLetter;
-        } else {
-          return null;
-        }
-      }
-    };
-    checkLetter();
-  });
+        const letterFound = checkLetter(button);
+      };
+    });
 
     // Run random generator
 
